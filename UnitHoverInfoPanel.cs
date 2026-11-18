@@ -20,7 +20,7 @@ public class UnitHoverInfoPanel : MonoBehaviour
     public float horizontalOffset = 12f;
 
     [Min(0f)]
-    public float boardUnitPanelGap = 100f;
+    public float boardUnitPanelGap = 20f;
 
     private UnitButtonHover activeButton;
     private RectTransform panelRect;
@@ -93,11 +93,11 @@ public class UnitHoverInfoPanel : MonoBehaviour
 
         activeButton = source;
         DisableRaycasts();
-        PositionBesideButton(buttonRect, showOnRight);
         if (!gameObject.activeSelf)
         {
             gameObject.SetActive(true);
         }
+        PositionBesideButton(buttonRect, showOnRight);
     }
 
     public void Hide(UnitButtonHover source)
@@ -374,11 +374,18 @@ public class UnitHoverInfoPanel : MonoBehaviour
 
         if (showOnRight)
         {
+            // The panel height changes with the number of matching characters, so
+            // rebuild the layout first; otherwise the bottom edge is computed from a
+            // stale size and the panel ends up misaligned.
+            LayoutRebuilder.ForceRebuildLayoutImmediate(panelRect);
+
+            // World corners: 0 = bottom-left, 1 = top-left, 2 = top-right, 3 = bottom-right.
+            // Align the panel's bottom-left with the button's bottom-right, plus a gap.
             Vector3[] panelCorners = new Vector3[4];
             panelRect.GetWorldCorners(panelCorners);
             Vector3 gapOffset = panelParent.TransformVector(new Vector3(boardUnitPanelGap, 0f, 0f));
-            Vector3 targetPanelTopLeft = buttonCorners[2] + gapOffset;
-            panelRect.position += targetPanelTopLeft - panelCorners[1];
+            Vector3 targetPanelBottomLeft = buttonCorners[3] + gapOffset;
+            panelRect.position += targetPanelBottomLeft - panelCorners[0];
             return;
         }
 
