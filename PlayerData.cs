@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerData : MonoBehaviour
 {
-    [Header("�����R�C��")]
+    [Header("所持コイン")]
     public int gold = 10;
     public TMP_Text goldText;
 
@@ -16,11 +16,11 @@ public class PlayerData : MonoBehaviour
     private int initialHp;
     public int InitialHp => initialHp;
 
-    [Header("�����L�����N�^�[")]
+    [Header("所持キャラクター")]
     public List<OwnedCharacter> ownedCharacters =
         new List<OwnedCharacter>();
 
-    [Header("�莝��")]
+    [Header("手持ち")]
     public HandManager handManager;
 
     private void Awake()
@@ -50,7 +50,7 @@ public class PlayerData : MonoBehaviour
         if (!ownedCharacters.Contains(character))
         {
             Debug.LogError(
-                "���p�Ώۂ̃L�����N�^�[���������X�g�ɑ��݂��܂���I"
+                "売却対象のキャラクターが所持リストに存在しません！"
             );
 
             return false;
@@ -89,9 +89,9 @@ public class PlayerData : MonoBehaviour
 
         Debug.Log(
             character.data.characterName +
-            " �� " +
+            " を " +
             sellPrice +
-            "G �Ŕ��p���܂����I"
+            "G で売却しました！"
         );
 
         return true;

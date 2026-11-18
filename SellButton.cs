@@ -19,7 +19,7 @@ public class SellButton :
         if (button == null)
         {
             Debug.LogError(
-                "SellButton��Button�R���|�[�l���g������܂���I"
+                "SellButtonにButtonコンポーネントがありません！"
             );
         }
 
@@ -50,8 +50,8 @@ public class SellButton :
         OwnedCharacter character =
             boardManager.GetSelectedCharacter();
 
-        // �莝���E�Ֆʂ̃L�����N�^�[��
-        // �I�����Ă���ꍇ�̂ݔ��p�\
+        // 手持ち・盤面のキャラクターが
+        // 選択している場合のみ売却可能
         bool canSellItem = boardManager.selectionType == BoardManager.SelectionType.Hand &&
                            boardManager.selectedHandSlot != null &&
                            boardManager.selectedHandSlot.itemData != null;
@@ -95,7 +95,7 @@ public class SellButton :
         if (boardManager == null)
         {
             Debug.LogError(
-                "BoardManager��������܂���I"
+                "BoardManagerが見つかりません！"
             );
 
             return;
@@ -107,7 +107,7 @@ public class SellButton :
             ItemData soldItem = boardManager.selectedHandSlot.RemoveItem();
             boardManager.ClearSelection();
             SetInteractable(false);
-            Debug.Log("Item " + soldItem.itemName + " ��0G�Ŕ��p���܂����B");
+            Debug.Log("Item " + soldItem.itemName + " を0Gで売却しました。");
             return;
         }
 
@@ -120,19 +120,19 @@ public class SellButton :
         if (player == null)
         {
             Debug.LogError(
-                "PlayerData��������܂���I"
+                "PlayerDataが見つかりません！"
             );
 
             return;
         }
 
-        // ���p����
+        // 売却処理
         if (!player.SellCharacter(character))
         {
             return;
         }
 
-        // �莝���𔄋p�����ꍇ
+        // 手持ちを売却した場合
         if (boardManager.selectionType ==
             BoardManager.SelectionType.Hand)
         {
@@ -142,7 +142,7 @@ public class SellButton :
             }
         }
 
-        // �Ֆʂ𔄋p�����ꍇ
+        // 盤面を売却した場合
         if (boardManager.selectionType ==
             BoardManager.SelectionType.Board)
         {
@@ -152,10 +152,10 @@ public class SellButton :
             }
         }
 
-        // �I������
+        // 選択解除
         boardManager.ClearSelection();
 
-        // ���p����͊m���ɖ�����
+        // 売却直後は確実に無効化
         SetInteractable(false);
     }
 
@@ -178,14 +178,14 @@ public class SellButton :
         if (boardManager == null)
         {
             Debug.LogError(
-                "BoardManager��������܂���I"
+                "BoardManagerが見つかりません！"
             );
 
             return;
         }
 
         // -----------------------------------------
-        // �莝���L�����N�^�[
+        // 手持ちキャラクター
         // -----------------------------------------
 
         HandSlot handSlot =
@@ -207,7 +207,7 @@ public class SellButton :
                 handSlot;
 
             Debug.Log(
-                "�莝���L�����N�^�[�𔄋p�Ώۂɂ��܂����B"
+                "手持ちキャラクターを売却対象にしました。"
             );
 
             SellDraggedCharacter();
@@ -216,7 +216,7 @@ public class SellButton :
         }
 
         // -----------------------------------------
-        // �ՖʃL�����N�^�[
+        // 盤面キャラクター
         // -----------------------------------------
 
         BoardSlot boardSlot =
@@ -238,7 +238,7 @@ public class SellButton :
                 boardSlot;
 
             Debug.Log(
-                "�ՖʃL�����N�^�[�𔄋p�Ώۂɂ��܂����B"
+                "盤面キャラクターを売却対象にしました。"
             );
 
             SellDraggedCharacter();
@@ -263,7 +263,7 @@ public class SellButton :
             ItemData soldItem = boardManager.selectedHandSlot.RemoveItem();
             boardManager.ClearSelection();
             SetInteractable(false);
-            Debug.Log("Item " + soldItem.itemName + " ��0G�Ŕ��p���܂����B");
+            Debug.Log("Item " + soldItem.itemName + " を0Gで売却しました。");
             return;
         }
 
@@ -276,19 +276,19 @@ public class SellButton :
         if (player == null)
         {
             Debug.LogError(
-                "PlayerData��������܂���I"
+                "PlayerDataが見つかりません！"
             );
 
             return;
         }
 
-        // ���p����
+        // 売却処理
         if (!player.SellCharacter(character))
         {
             return;
         }
 
-        // �莝���𔄋p�����ꍇ
+        // 手持ちを売却した場合
         if (boardManager.selectionType ==
             BoardManager.SelectionType.Hand)
         {
@@ -298,7 +298,7 @@ public class SellButton :
             }
         }
 
-        // �Ֆʂ𔄋p�����ꍇ
+        // 盤面を売却した場合
         if (boardManager.selectionType ==
             BoardManager.SelectionType.Board)
         {
@@ -310,7 +310,7 @@ public class SellButton :
 
         Debug.Log(
             character.data.characterName +
-            " ���h���b�O���h���b�v�Ŕ��p���܂����I"
+            " をドラッグ＆ドロップで売却しました！"
         );
 
         boardManager.ClearSelection();

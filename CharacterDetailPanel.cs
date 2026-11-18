@@ -29,7 +29,7 @@ public class CharacterDetailPanel : MonoBehaviour
     public Transform attributeList;
     public Button attributeButtonTemplate;
 
-    [Header("�o����ʂ̏W�v���i�ݒ莞�̂ݗL���j")]
+    [Header("出撃画面の集計元（設定時のみ有効）")]
     public CharacterFullRosterListDisplay fullRosterSource;
     public RosterBoardDisplay rosterBoardDisplay;
 
@@ -146,10 +146,10 @@ public class CharacterDetailPanel : MonoBehaviour
         currentCharacter = data;
         currentOwnedCharacter = character;
 
-        // �A�C�R��
+        // アイコン
         SetDetailIcon(data);
 
-        // ��{���
+        // 基本情報
         if (nameText != null)
         {
             nameText.text =
@@ -164,7 +164,7 @@ public class CharacterDetailPanel : MonoBehaviour
                 "COST " + data.cost;
         }
 
-        // �X�e�[�^�X
+        // ステータス
         if (defenseText != null)
         {
             defenseText.text =
@@ -177,10 +177,10 @@ public class CharacterDetailPanel : MonoBehaviour
                 "ATK " + character.GetAttack(characterStatSettings);
         }
 
-        // ����
+        // 属性
         SetAttributeButtons(data);
 
-        // ���j�b�g
+        // ユニット
         SetCompleteUnitButtons(data.units);
 
         gameObject.SetActive(true);

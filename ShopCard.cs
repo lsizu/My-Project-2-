@@ -268,7 +268,7 @@ public class ShopCard :
         if (boardManager == null)
         {
             Debug.LogError(
-                "BoardManager��������܂���I"
+                "BoardManagerが見つかりません！"
             );
 
             return;
@@ -309,7 +309,7 @@ public class ShopCard :
 
         Debug.Log(
             characterData.characterName +
-            " �̃h���b�O���J�n���܂����B"
+            " のドラッグを開始しました。"
         );
     }
 
@@ -356,7 +356,7 @@ public class ShopCard :
         }
 
         // -----------------------------------------
-        // �V���b�v �� �莝��
+        // ショップ → 手持ち
         // -----------------------------------------
 
         HandSlot targetHandSlot =
@@ -386,7 +386,7 @@ public class ShopCard :
         }
 
         // -----------------------------------------
-        // �V���b�v �� �Ֆ�
+        // ショップ → 盤面
         // -----------------------------------------
 
         BoardSlot targetBoardSlot =

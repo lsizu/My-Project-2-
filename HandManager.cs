@@ -2,16 +2,16 @@ using UnityEngine;
 
 public class HandManager : MonoBehaviour
 {
-    [Header("�莝���ݒ�")]
+    [Header("手持ち設定")]
     public GameObject handSlotPrefab;
     public Transform handArea;
 
-    [Header("�莝���g��")]
+    [Header("手持ち枠数")]
     public int slotCount = 10;
 
     private HandSlot[] handSlots;
 
-    [Header("�ړ����̎莝���L�����N�^�[")]
+    [Header("移動中の手持ちキャラクター")]
     public HandSlot selectedHandSlot;
 
     void Start()
@@ -39,14 +39,14 @@ public class HandManager : MonoBehaviour
             HandSlot slot =
     slotObject.GetComponent<HandSlot>();
 
-            // �������͕K����ɂ���
+            // 初期化は必ず空にする
             slot.ownedCharacter = null;
 
             handSlots[i] = slot;
         }
     }
 
-    // �󂫃X���b�g�����邩
+    // 空きスロットがあるか
     public HandSlot FindEmptySlot()
     {
         if (handSlots == null) return null;
@@ -86,7 +86,7 @@ public class HandManager : MonoBehaviour
         return emptySlotCount;
     }
 
-    // ��ԍ��̋󂫃X���b�g�ɃL�����N�^�[������
+    // 一番左の空きスロットにキャラクターを入れる
     public bool AddCharacter(OwnedCharacter character)
     {
         if (character == null)
@@ -102,16 +102,16 @@ public class HandManager : MonoBehaviour
 
                 Debug.Log(
                     character.data.characterName +
-                    " ���莝���� " +
+                    " を手持ちの " +
                     (i + 1) +
-                    " �Ԗڂ̃X���b�g�ɔz�u���܂����B"
+                    " 番目のスロットに配置しました。"
                 );
 
                 return true;
             }
         }
 
-        Debug.Log("�莝���ɋ󂫃X���b�g������܂���I");
+        Debug.Log("手持ちに空きスロットがありません！");
 
         return false;
     }
@@ -142,7 +142,7 @@ public class HandManager : MonoBehaviour
         return null;
     }
 
-    // �V���b�v�L�����N�^�[����ԍ��̋󂫃X���b�g�֍w��
+    // ショップキャラクターを一番左の空きスロットへ購入
     public bool BuyShopCharacterToLeftmost(
         CharacterData character,
         ShopCard shopCard)
@@ -157,7 +157,7 @@ public class HandManager : MonoBehaviour
             return false;
         }
 
-        // �󂫃X���b�g��T��
+        // 空きスロットを探す
         HandSlot targetSlot = null;
 
         for (int i = 0; i < handSlots.Length; i++)
@@ -169,10 +169,10 @@ public class HandManager : MonoBehaviour
             }
         }
 
-        // �莝�������t
+        // 手持ちが満杯
         if (targetSlot == null)
         {
-            Debug.Log("�莝���ɋ󂫃X���b�g������܂���I");
+            Debug.Log("手持ちに空きスロットがありません！");
             return false;
         }
 
@@ -181,14 +181,14 @@ public class HandManager : MonoBehaviour
 
         if (player == null)
         {
-            Debug.LogError("PlayerData��������܂���I");
+            Debug.LogError("PlayerDataが見つかりません！");
             return false;
         }
 
-        // �S�[���h�`�F�b�N
+        // ゴールドチェック
         if (!player.CanBuy(character.cost))
         {
-            Debug.Log("�R�C��������܂���I");
+            Debug.Log("コインが足りません！");
             return false;
         }
 
@@ -209,28 +209,28 @@ public class HandManager : MonoBehaviour
             return false;
         }
 
-        // �S�[���h���x����
+        // ゴールドを支払う
         player.gold -= character.cost;
         player.UpdateGoldUI();
 
-        // �����L�����N�^�[�����
+        // 所持キャラクターを作る
         OwnedCharacter ownedCharacter =
             new OwnedCharacter(
                 character,
                 statSettings);
 
-        // �������X�g�ɒǉ�
+        // 所持リストに追加
         player.ownedCharacters.Add(ownedCharacter);
 
-        // ���[�̋󂫃X���b�g�ɔz�u
+        // 左端の空きスロットに配置
         targetSlot.SetCharacter(ownedCharacter);
 
         Debug.Log(
             character.characterName +
-            " �����[�̋󂫃X���b�g�ɔz�u���܂����I"
+            " を左端の空きスロットに配置しました！"
         );
 
-        // �V���b�v�������
+        // ショップから消す
         ShopSlot shopSlot =
     shopCard.GetShopSlot();
 
@@ -242,7 +242,7 @@ public class HandManager : MonoBehaviour
         return true;
     }
 
-    // �莝���L�����N�^�[��I��
+    // 手持ちキャラクターを選択
     public void SelectHandCharacter(
         OwnedCharacter character,
         HandSlot handSlot)
@@ -252,22 +252,22 @@ public class HandManager : MonoBehaviour
             return;
         }
 
-        // ���łɕʂ̎莝���L�����N�^�[��I��
+        // すでに別の手持ちキャラクターを選択中
         if (selectedHandSlot != null)
         {
-            // �����L�����N�^�[���N���b�N
-            // �� �I������
+            // 同じキャラクターをクリック
+            // → 選択解除
             if (selectedHandSlot == handSlot)
             {
                 selectedHandSlot = null;
 
-                Debug.Log("�莝���L�����N�^�[�̑I�����������܂����B");
+                Debug.Log("手持ちキャラクターの選択を解除しました。");
 
                 return;
             }
 
-            // �ʂ̎莝���L�����N�^�[
-            // �� ����
+            // 別の手持ちキャラクター
+            // → 交換
             SwapHandCharacters(
                 selectedHandSlot,
                 handSlot
@@ -276,16 +276,16 @@ public class HandManager : MonoBehaviour
             return;
         }
 
-        // �����I�����Ă��Ȃ�
+        // 何も選択していない
         selectedHandSlot = handSlot;
 
         Debug.Log(
             character.data.characterName +
-            " ���莝���őI�����܂����B"
+            " を手持ちで選択しました。"
         );
     }
 
-    // �莝���L�����N�^�[���ړ��E����
+    // 手持ちキャラクターを移動・交換
     public void MoveHandCharacter(
         HandSlot fromSlot,
         HandSlot toSlot)
@@ -300,7 +300,7 @@ public class HandManager : MonoBehaviour
             return;
         }
 
-        // �ړ��悪�󂢂Ă���
+        // 移動先が空いている
         if (toSlot.IsEmpty())
         {
             OwnedCharacter character =
@@ -312,20 +312,20 @@ public class HandManager : MonoBehaviour
 
             Debug.Log(
                 character.data.characterName +
-                " ���莝�����ňړ����܂����I"
+                " を手持ち内で移動しました！"
             );
 
             return;
         }
 
-        // �ړ���ɂ��L�����N�^�[������
+        // 移動先にもキャラクターがいる
         SwapHandCharacters(
             fromSlot,
             toSlot
         );
     }
 
-    // �莝���L�����N�^�[������
+    // 手持ちキャラクターを交換
     public void SwapHandCharacters(
         HandSlot slotA,
         HandSlot slotB)
@@ -353,9 +353,9 @@ public class HandManager : MonoBehaviour
 
         Debug.Log(
             characterA.data.characterName +
-            " �� " +
+            " と " +
             characterB.data.characterName +
-            " ���������܂����I"
+            " を交換しました！"
         );
     }
 }

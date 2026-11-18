@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class CharacterDetailTabs : MonoBehaviour
 {
-    [Header("�^�u���e")]
+    [Header("タブ内容")]
     public GameObject basicPanel;
     public GameObject unitList;
     public GameObject attributePanel;
